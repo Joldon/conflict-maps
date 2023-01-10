@@ -1,36 +1,16 @@
-import React from "react";
+import { useState } from "react";
 import "./App.css";
-import { ComposableMap, Geographies, Geography } from "react-simple-maps";
+import MapChart from "./components/MapChart";
+import { Tooltip as Reacttooltip } from "react-tooltip";
 
 function App() {
-  // const geoUrl = "./world-110m.json";
-  // const geoUrl = "https://observablehq.com/@d3/world-map-svg";
-
-  // const geoUrl =
-  //   "https://raw.githubusercontent.com/zcreativelabs/react-simple-maps/master/topojson-maps/world-110m.json";
-  const geoUrl =
-    "https://raw.githubusercontent.com/deldersveld/topojson/master/world-countries.json";
-
-  console.log(geoUrl);
-
+  const [content, setContent] = useState("");
+  debugger;
   return (
     <>
       <p>Conflict Map</p>
-      <ComposableMap
-        projection="geoEqualEarth"
-        projectionConfig={{
-          rotate: [-10, 0, 0],
-          scale: 170,
-        }}
-      >
-        <Geographies geography={geoUrl}>
-          {({ geographies }) =>
-            geographies.map((geo) => (
-              <Geography key={geo.rsmKey} geography={geo} />
-            ))
-          }
-        </Geographies>
-      </ComposableMap>
+      <MapChart setTooltipContent={setContent} />
+      <Reacttooltip>{content}</Reacttooltip>
     </>
   );
 }
