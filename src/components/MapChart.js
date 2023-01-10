@@ -60,6 +60,7 @@ const formatConflicts = (data, property = "countryCode") => {
       ...item,
       countryCode: countryCode.byCountry(item.country)?.iso3 || [],
     }));
+  console.log("countrycode", countryCode.byCountry("Pakistan"));
   // .filter((item) => item.countryCode !== undefined));
   const groupedData = groupObjectByProperty(conflicts, "countryCode");
   console.log("groupedData", groupedData);
@@ -79,16 +80,25 @@ console.log("data", data);
 
 console.log("formatConflicts.Result", formatConflicts(conflictsData.Result));
 const MapChart = ({ setTooltipContent }) => {
-  const [data, setdata] = useState([]);
+  const [data, setData] = useState([]);
   const [maxConflicts, setMaxConflicts] = useState(0);
+  const [param, setParam] = useState("conflicts");
 
   useEffect(() => {
-    setdata(formatConflicts(conflictsData.Result));
-    setMaxConflicts(data.maxConflicts);
+    const { conflicts, maxConflicts } = formatConflicts(conflictsData.Result);
+    setData(conflicts);
+    setMaxConflicts(maxConflicts);
+    // setData(formatConflicts(conflictsData.Result));
+    // setMaxConflicts(data.maxConflicts);
   }, []);
 
-  const colorScale = scaleLinear().domain([0, 100]).range(["#FFF", "#06F"]);
-
+  const colorScale = scaleLinear()
+    .domain([0, maxConflicts])
+    .range(["#ffedea", "#ff5233"]);
+  // .range(["#FFF", "#06F"]);
+  console.log(
+    "https://raw.githubusercontent.com/deldersveld/topojson/master/world-countries.json"
+  );
   return (
     <>
       <ComposableMap
@@ -102,23 +112,30 @@ const MapChart = ({ setTooltipContent }) => {
         <Graticule stroke="#E4E5E6" strokeWidth={0.5} />
         <Geographies geography={geoUrl}>
           {({ geographies }) =>
-            geographies.map((geo) => (
-              <Geography
-                key={geo.rsmKey}
-                geography={geo}
-                style={{
-                  default: {
-                    fill: "#EEE",
-                  },
-                  hover: {
-                    fill: "#F53",
-                  },
-                  pressed: {
-                    fill: "#E42",
-                  },
-                }}
-              />
-            ))
+            geographies.map((geo) => {
+              const countryCode = geo.id || geo.properties.ISO_A3;
+              const d = data[countryCode];
+              //   console.log("countryCode", geo.id);
+              console.log("d", d);
+              return (
+                <Geography
+                  key={geo.rsmKey}
+                  geography={geo}
+                  fill={d ? colorScale(d[param]) : "#F5F4F6"}
+                  //   style={{
+                  //     default: {
+                  //       fill: "#EEE",
+                  //     },
+                  //     hover: {
+                  //       fill: "#F53",
+                  //     },
+                  //     pressed: {
+                  //       fill: "#E42",
+                  //     },
+                  //   }}
+                />
+              );
+            })
           }
         </Geographies>
       </ComposableMap>
