@@ -51,7 +51,7 @@ const groupObjectByProperty = (objArray, property) => {
 //   });
 // };
 // const data = conflictsData.Result;
-console.log(conflictsData);
+console.log("conflcitsData", conflictsData);
 const formatConflicts = (data, property = "countryCode") => {
   const conflicts =
     // data !== undefined ||
@@ -62,7 +62,7 @@ const formatConflicts = (data, property = "countryCode") => {
     }));
   // .filter((item) => item.countryCode !== undefined));
   const groupedData = groupObjectByProperty(conflicts, "countryCode");
-  console.log(groupedData);
+  console.log("groupedData", groupedData);
   // const formattedData(maxConflicts)
   const maxConflicts = Object.keys(groupedData).reduce((max, country) =>
     max > groupedData[country].conflicts ? max : groupedData[country].conflicts
@@ -75,12 +75,20 @@ const formatConflicts = (data, property = "countryCode") => {
 // Calls the specified callback function for all the elements in an array. The return value of the callback function is the accumulated result, and is provided as an argument in the next call to the callback function.
 
 const data = formatConflicts(conflictsData.Result);
+console.log("data", data);
 
-const colorScale = scaleLinear().domain([0, 100]).range(["#FFF", "#06F"]);
-
+console.log("formatConflicts.Result", formatConflicts(conflictsData.Result));
 const MapChart = ({ setTooltipContent }) => {
   const [data, setdata] = useState([]);
   const [maxConflicts, setMaxConflicts] = useState(0);
+
+  useEffect(() => {
+    setdata(formatConflicts(conflictsData.Result));
+    setMaxConflicts(data.maxConflicts);
+  }, []);
+
+  const colorScale = scaleLinear().domain([0, 100]).range(["#FFF", "#06F"]);
+
   return (
     <>
       <ComposableMap
@@ -90,6 +98,8 @@ const MapChart = ({ setTooltipContent }) => {
           scale: 170,
         }}
       >
+        <Sphere stroke="#E4E5E6" strokeWidth={0.5} />
+        <Graticule stroke="#E4E5E6" strokeWidth={0.5} />
         <Geographies geography={geoUrl}>
           {({ geographies }) =>
             geographies.map((geo) => (
