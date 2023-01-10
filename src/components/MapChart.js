@@ -60,7 +60,7 @@ const formatConflicts = (data, property = "countryCode") => {
       ...item,
       countryCode: countryCode.byCountry(item.country)?.iso3 || [],
     }));
-  console.log("countrycode", countryCode.byCountry("Pakistan"));
+  console.log("single countrycode", countryCode.byCountry("Russia"));
   // .filter((item) => item.countryCode !== undefined));
   const groupedData = groupObjectByProperty(conflicts, "countryCode");
   console.log("groupedData", groupedData);
@@ -76,9 +76,9 @@ const formatConflicts = (data, property = "countryCode") => {
 // Calls the specified callback function for all the elements in an array. The return value of the callback function is the accumulated result, and is provided as an argument in the next call to the callback function.
 
 const data = formatConflicts(conflictsData.Result);
-console.log("data", data);
+// console.log("data", data);
 
-console.log("formatConflicts.Result", formatConflicts(conflictsData.Result));
+// console.log("formatConflicts.Result", formatConflicts(conflictsData.Result));
 const MapChart = ({ setTooltipContent }) => {
   const [data, setData] = useState([]);
   const [maxConflicts, setMaxConflicts] = useState(0);
@@ -96,11 +96,39 @@ const MapChart = ({ setTooltipContent }) => {
     .domain([0, maxConflicts])
     .range(["#ffedea", "#ff5233"]);
   // .range(["#FFF", "#06F"]);
-  console.log(
-    "https://raw.githubusercontent.com/deldersveld/topojson/master/world-countries.json"
-  );
+
+  const changeType = (e) => {
+    const type = Number(e.target.value);
+    const data = type
+      ? conflictsData.Result.filter(
+          (conflict) => conflict.type_of_violence === type
+        )
+      : conflictsData.Result;
+
+    const { conflicts, maxConflicts } = formatConflicts(data);
+    setData(conflicts);
+    setMaxConflicts(maxConflicts);
+  };
+
+  const changeParam = (e) => {
+    setParam(e.target.value);
+  };
+
+  //   console.log(
+  //     "https://raw.githubusercontent.com/deldersveld/topojson/master/world-countries.json"
+  //   );
   return (
     <>
+      <select name="type" onChange={changeType}>
+        <option value="">all types</option>
+        <option value="1">state-based</option>
+        <option value="2">non-state</option>
+        <option value="3">one-sided</option>
+      </select>
+      <select name="type" onChange={changeParam}>
+        <option value="conflicts">conflicts</option>
+        <option value="fatalities">fatalities</option>
+      </select>
       <ComposableMap
         projection="geoEqualEarth"
         projectionConfig={{
@@ -115,24 +143,26 @@ const MapChart = ({ setTooltipContent }) => {
             geographies.map((geo) => {
               const countryCode = geo.id || geo.properties.ISO_A3;
               const d = data[countryCode];
+
               //   console.log("countryCode", geo.id);
-              console.log("d", d);
+              //   console.log("d", d);
+              //   console.log("param", param);
               return (
                 <Geography
                   key={geo.rsmKey}
                   geography={geo}
                   fill={d ? colorScale(d[param]) : "#F5F4F6"}
-                  //   style={{
-                  //     default: {
-                  //       fill: "#EEE",
-                  //     },
-                  //     hover: {
-                  //       fill: "#F53",
-                  //     },
-                  //     pressed: {
-                  //       fill: "#E42",
-                  //     },
-                  //   }}
+                  // style={{
+                  //   default: {
+                  //     fill: "#EEE",
+                  //   },
+                  //   hover: {
+                  //     fill: "#F53",
+                  //   },
+                  //   pressed: {
+                  //     fill: "#E42",
+                  //   },
+                  // }}
                 />
               );
             })
