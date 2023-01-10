@@ -13,6 +13,8 @@ import countryCode from "country-code-lookup";
 
 const geoUrl =
   "https://raw.githubusercontent.com/deldersveld/topojson/master/world-countries.json";
+// const geoUrl =
+//   "https://raw.githubusercontent.com/lotusms/world-map-data/main/world.json";
 
 const groupObjectByProperty = (objArray, property) => {
   return objArray.reduce((acc, obj) => {
@@ -75,7 +77,7 @@ const formatConflicts = (data, property = "countryCode") => {
 // A function that accepts up to four arguments. The reduce method calls the callbackfn function one time for each element in the array.
 // Calls the specified callback function for all the elements in an array. The return value of the callback function is the accumulated result, and is provided as an argument in the next call to the callback function.
 
-const data = formatConflicts(conflictsData.Result);
+// const data = formatConflicts(conflictsData.Result);
 // console.log("data", data);
 
 // console.log("formatConflicts.Result", formatConflicts(conflictsData.Result));
@@ -114,9 +116,9 @@ const MapChart = ({ setTooltipContent }) => {
     setParam(e.target.value);
   };
 
-  //   console.log(
-  //     "https://raw.githubusercontent.com/deldersveld/topojson/master/world-countries.json"
-  //   );
+  console.log(
+    "https://raw.githubusercontent.com/lotusms/world-map-data/main/world.json"
+  );
   return (
     <>
       <select name="type" onChange={changeType}>
@@ -135,6 +137,9 @@ const MapChart = ({ setTooltipContent }) => {
           rotate: [-10, 0, 0],
           scale: 170,
         }}
+        data-tip=""
+        width={1400}
+        height={500}
       >
         <Sphere stroke="#E4E5E6" strokeWidth={0.5} />
         <Graticule stroke="#E4E5E6" strokeWidth={0.5} />
@@ -152,6 +157,25 @@ const MapChart = ({ setTooltipContent }) => {
                   key={geo.rsmKey}
                   geography={geo}
                   fill={d ? colorScale(d[param]) : "#F5F4F6"}
+                  onMouseEnter={() => {
+                    const stats = geo.properties?.name;
+                    // console.log("NAME", NAME);
+
+                    try {
+                      setTooltipContent(`${stats} - ${d[param]}`);
+                      setTooltipContent(
+                        `${stats} - events: ${d.conflicts || 0} - fatalities: ${
+                          d.fatalities || 0
+                        }`
+                      );
+                    } catch {
+                      setTooltipContent("");
+                    }
+                  }}
+                  onMouseLeave={() => {
+                    setTooltipContent("");
+                  }}
+
                   // style={{
                   //   default: {
                   //     fill: "#EEE",
