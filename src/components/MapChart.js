@@ -36,34 +36,18 @@ const groupObjectByProperty = (objArray, property) => {
       [key]: {
         ...acc[key],
         conflicts: acc[key].conflicts + 1,
+        fatalities: acc[key].fatalities + obj.best,
       },
     };
   }, {});
 };
 
-// const formatConflicts = (data, property = "countryCode") => {
-//   return data?.map((item) => {
-//     const countryName = countryCode.getName(item[property]);
-//     const country = countryCode.getCountry(countryName);
-//     return {
-//       ...item,
-//       country: countryName,
-//       countryCode: country.iso3,
-//     };
-//   });
-// };
-// const data = conflictsData.Result;
-console.log("conflcitsData", conflictsData);
 const formatConflicts = (data, property = "countryCode") => {
-  const conflicts =
-    // data !== undefined ||
-    // (data.length > 0 &&
-    data?.map((item) => ({
-      ...item,
-      countryCode: countryCode.byCountry(item.country)?.iso3 || [],
-    }));
-  console.log("single countrycode", countryCode.byCountry("Russia"));
-  // .filter((item) => item.countryCode !== undefined));
+  const conflicts = data?.map((item) => ({
+    ...item,
+    countryCode: countryCode.byCountry(item.country)?.iso3 || [],
+  }));
+
   const groupedData = groupObjectByProperty(conflicts, "countryCode");
   console.log("groupedData", groupedData);
   // const formattedData(maxConflicts)
@@ -73,9 +57,6 @@ const formatConflicts = (data, property = "countryCode") => {
 
   return { conflicts: groupedData, maxConflicts };
 };
-//   reduce(callbackfn: (previousValue: string, currentValue: string, currentIndex: number, array: string[]) => string): string
-// A function that accepts up to four arguments. The reduce method calls the callbackfn function one time for each element in the array.
-// Calls the specified callback function for all the elements in an array. The return value of the callback function is the accumulated result, and is provided as an argument in the next call to the callback function.
 
 // const data = formatConflicts(conflictsData.Result);
 // console.log("data", data);
@@ -90,8 +71,6 @@ const MapChart = ({ setTooltipContent }) => {
     const { conflicts, maxConflicts } = formatConflicts(conflictsData.Result);
     setData(conflicts);
     setMaxConflicts(maxConflicts);
-    // setData(formatConflicts(conflictsData.Result));
-    // setMaxConflicts(data.maxConflicts);
   }, []);
 
   const colorScale = scaleLinear()
@@ -116,9 +95,9 @@ const MapChart = ({ setTooltipContent }) => {
     setParam(e.target.value);
   };
 
-  console.log(
-    "https://raw.githubusercontent.com/lotusms/world-map-data/main/world.json"
-  );
+  //   console.log(
+  //     "https://raw.githubusercontent.com/lotusms/world-map-data/main/world.json"
+  //   );
   return (
     <>
       <select name="type" onChange={changeType}>
@@ -159,7 +138,6 @@ const MapChart = ({ setTooltipContent }) => {
                   fill={d ? colorScale(d[param]) : "#F5F4F6"}
                   onMouseEnter={() => {
                     const stats = geo.properties?.name;
-                    // console.log("NAME", NAME);
 
                     try {
                       setTooltipContent(`${stats} - ${d[param]}`);
@@ -175,18 +153,6 @@ const MapChart = ({ setTooltipContent }) => {
                   onMouseLeave={() => {
                     setTooltipContent("");
                   }}
-
-                  // style={{
-                  //   default: {
-                  //     fill: "#EEE",
-                  //   },
-                  //   hover: {
-                  //     fill: "#F53",
-                  //   },
-                  //   pressed: {
-                  //     fill: "#E42",
-                  //   },
-                  // }}
                 />
               );
             })
