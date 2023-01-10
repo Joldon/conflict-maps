@@ -5,7 +5,7 @@ import { Tooltip as Reacttooltip } from "react-tooltip";
 
 function App() {
   const [content, setContent] = useState("");
-  debugger;
+
   return (
     <>
       <p>Conflict Map</p>
