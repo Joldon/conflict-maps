@@ -33,16 +33,10 @@ export const formatConflicts = (data, property = "countryCode") => {
   }));
 
   const groupedData = groupObjectByProperty(conflicts, "countryCode");
-  console.log("groupedData", groupedData);
-  // const formattedData(maxConflicts)
+
   const maxConflicts = Object.keys(groupedData).reduce((max, country) =>
     max > groupedData[country].conflicts ? max : groupedData[country].conflicts
   );
 
   return { conflicts: groupedData, maxConflicts };
 };
-
-// const data = formatConflicts(conflictsData.Result);
-// console.log("data", data);
-
-// console.log("formatConflicts.Result", formatConflicts(conflictsData.Result));
