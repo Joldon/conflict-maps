@@ -30,7 +30,6 @@ const MapChart = ({ setTooltipContent }) => {
   const colorScale = scaleLinear()
     .domain([0, maxConflicts])
     .range(["#ffedea", "#ff5233"]);
-  // .range(["#FFF", "#06F"]);
 
   const changeType = (e) => {
     const type = Number(e.target.value);
@@ -49,9 +48,6 @@ const MapChart = ({ setTooltipContent }) => {
     setParam(e.target.value);
   };
 
-  //   console.log(
-  //     "https://raw.githubusercontent.com/lotusms/world-map-data/main/world.json"
-  //   );
   return (
     <>
       <select name="type" onChange={changeType}>
@@ -71,8 +67,8 @@ const MapChart = ({ setTooltipContent }) => {
           scale: 170,
         }}
         data-tip=""
-        width={1400}
-        height={500}
+        width={900}
+        height={600}
       >
         <Sphere stroke="#E4E5E6" strokeWidth={0.5} />
         <Graticule stroke="#E4E5E6" strokeWidth={0.5} />
@@ -82,9 +78,6 @@ const MapChart = ({ setTooltipContent }) => {
               const countryCode = geo.id || geo.properties.ISO_A3;
               const d = data[countryCode];
 
-              //   console.log("countryCode", geo.id);
-              //   console.log("d", d);
-              //   console.log("param", param);
               return (
                 <Geography
                   key={geo.rsmKey}
