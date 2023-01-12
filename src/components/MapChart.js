@@ -67,8 +67,8 @@ const MapChart = ({ setTooltipContent }) => {
           scale: 170,
         }}
         data-tip=""
-        width={900}
-        height={600}
+        width={1400}
+        height={500}
       >
         <Sphere stroke="#E4E5E6" strokeWidth={0.5} />
         <Graticule stroke="#E4E5E6" strokeWidth={0.5} />
