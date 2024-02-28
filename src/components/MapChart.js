@@ -11,10 +11,10 @@ import { scaleLinear } from "d3-scale";
 import conflictsData from "../data/ucdp.json";
 import { formatConflicts } from "../components/FormatData";
 
-const geoUrl =
-  "https://raw.githubusercontent.com/deldersveld/topojson/master/world-countries.json";
 // const geoUrl =
-//   "https://raw.githubusercontent.com/lotusms/world-map-data/main/world.json";
+//   "https://raw.githubusercontent.com/deldersveld/topojson/master/world-countries.json";
+const geoUrl =
+  "https://raw.githubusercontent.com/lotusms/world-map-data/main/world.json";
 
 const MapChart = ({ setTooltipContent }) => {
   const [data, setData] = useState([]);
