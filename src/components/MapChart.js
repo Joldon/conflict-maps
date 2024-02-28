@@ -10,7 +10,6 @@ import {
 import { scaleLinear } from "d3-scale";
 import conflictsData from "../data/ucdp.json";
 import { formatConflicts } from "./FormatData";
-import Legend from "./Legend";
 import ColorRampLegend from "./ColorRampLegend";
 
 // const geoUrl =
