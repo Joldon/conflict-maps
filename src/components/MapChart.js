@@ -9,7 +9,9 @@ import {
 } from "react-simple-maps";
 import { scaleLinear } from "d3-scale";
 import conflictsData from "../data/ucdp.json";
-import { formatConflicts } from "../components/FormatData";
+import { formatConflicts } from "./FormatData";
+import Legend from "./Legend";
+import ColorRampLegend from "./ColorRampLegend";
 
 // const geoUrl =
 //   "https://raw.githubusercontent.com/deldersveld/topojson/master/world-countries.json";
@@ -106,6 +108,8 @@ const MapChart = ({ setTooltipContent }) => {
           }
         </Geographies>
       </ComposableMap>
+      {/* <Legend colorScale={colorScale} maxConflicts={maxConflicts} /> */}
+      <ColorRampLegend colorScale={colorScale} min={0} max={maxConflicts} />
     </>
   );
 };
